@@ -1,9 +1,10 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
-	"strings"
 )
 
 var Logger *logrus.Entry
@@ -26,6 +27,7 @@ type Config struct {
 	JoinInclude        []string
 	PartFake           bool
 	PasteBufferTimeout int
+	UsersChannel       bool
 }
 
 type Settings struct {
@@ -44,8 +46,15 @@ type Settings struct {
 	DisableAutoView bool
 }
 
+// NewConfig returns a new, empty Config struct with defaults.
+func NewConfig() Config {
+	return Config{
+		UsersChannel: true,
+	}
+}
+
 func Migrate(defaultcfg Config) *Config {
-	// migratie mattermost specific settings from general to mattermost settings
+	// migrate mattermost specific settings from general to mattermost settings
 	if len(defaultcfg.Mattermost.JoinInclude) == 0 {
 		defaultcfg.Mattermost.JoinInclude = defaultcfg.JoinInclude
 	}

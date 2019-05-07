@@ -4,12 +4,13 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/42wim/matterircd/config"
-	"github.com/42wim/matterircd/mm-go-irckit"
-	"github.com/sirupsen/logrus"
 	"net"
 	"os"
 	"strings"
+
+	"github.com/42wim/matterircd/config"
+	irckit "github.com/42wim/matterircd/mm-go-irckit"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -28,7 +29,7 @@ func main() {
 	config.Logger = logger
 
 	// config related. instantiate a new config.Config to store flags
-	cfg = config.Config{}
+	cfg = config.NewConfig()
 	flagConfig := flag.String("conf", "matterircd.toml", "config file")
 
 	// bools for showing version/enabling debug

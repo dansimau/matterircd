@@ -411,7 +411,9 @@ func CmdPrivMsg(s Server, u *User, msg *irc.Message) error {
 	if msg.Trailing == "" {
 		return nil
 	}
-	if msg.Params[0] == "&users" {
+	// Drop the message if &users channel is enabled and we receive a message
+	// for it.
+	if u.MmInfo.Cfg.UsersChannel && msg.Params[0] == "&users" {
 		return nil
 	}
 	query := msg.Params[0]

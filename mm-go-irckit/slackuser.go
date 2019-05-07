@@ -190,21 +190,24 @@ func (u *User) addSlackUsersToChannels() {
 	srv := u.Srv
 	throttle := time.Tick(time.Millisecond * 100)
 	logger.Debug("in addUsersToChannels()")
-	// add all users, also who are not on channels
-	ch := srv.Channel("&users")
-	users, _ := u.sc.GetUsers()
-	for _, mmuser := range users {
-		// do not add our own nick
-		if mmuser.ID == u.sinfo.User.ID {
-			continue
+
+	if u.MmInfo.Cfg.UsersChannel {
+		// add all users, also who are not on channels
+		ch := srv.Channel("&users")
+		users, _ := u.sc.GetUsers()
+		for _, mmuser := range users {
+			// do not add our own nick
+			if mmuser.ID == u.sinfo.User.ID {
+				continue
+			}
+			u.createSlackUser(&mmuser)
+			u.addSlackUserToChannel(&mmuser, "&users", "&users")
+			u.Lock()
+			u.susers[mmuser.ID] = mmuser
+			u.Unlock()
 		}
-		u.createSlackUser(&mmuser)
-		u.addSlackUserToChannel(&mmuser, "&users", "&users")
-		u.Lock()
-		u.susers[mmuser.ID] = mmuser
-		u.Unlock()
+		ch.Join(u)
 	}
-	ch.Join(u)
 
 	channels := make(chan interface{}, 10)
 	for i := 0; i < 10; i++ {

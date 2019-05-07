@@ -43,6 +43,7 @@ type MmCfg struct {
 	PrefixMainTeam     bool
 	PasteBufferTimeout int
 	DisableAutoView    bool
+	UsersChannel       bool
 }
 
 func NewUserMM(c net.Conn, srv Server, cfg *MmCfg) *User {
@@ -56,13 +57,13 @@ func NewUserMM(c net.Conn, srv Server, cfg *MmCfg) *User {
 	u.MmInfo.Cfg.AllowedServers = cfg.MattermostSettings.Restrict
 	u.MmInfo.Cfg.DefaultServer = cfg.MattermostSettings.DefaultServer
 	u.MmInfo.Cfg.DefaultTeam = cfg.MattermostSettings.DefaultTeam
+	u.MmInfo.Cfg.DisableAutoView = cfg.MattermostSettings.DisableAutoView
+	u.MmInfo.Cfg.Insecure = cfg.MattermostSettings.Insecure
 	u.MmInfo.Cfg.JoinInclude = cfg.MattermostSettings.JoinInclude
 	u.MmInfo.Cfg.JoinExclude = cfg.MattermostSettings.JoinExclude
 	u.MmInfo.Cfg.PartFake = cfg.MattermostSettings.PartFake
-	u.MmInfo.Cfg.Insecure = cfg.MattermostSettings.Insecure
-	u.MmInfo.Cfg.SkipTLSVerify = cfg.MattermostSettings.SkipTLSVerify
 	u.MmInfo.Cfg.PrefixMainTeam = cfg.MattermostSettings.PrefixMainTeam
-	u.MmInfo.Cfg.DisableAutoView = cfg.MattermostSettings.DisableAutoView
+	u.MmInfo.Cfg.SkipTLSVerify = cfg.MattermostSettings.SkipTLSVerify
 
 	u.idleStop = make(chan struct{})
 	// used for login
@@ -151,20 +152,24 @@ func (u *User) addUsersToChannels() {
 	srv := u.Srv
 	throttle := time.Tick(time.Millisecond * 50)
 	logger.Debug("in addUsersToChannels()")
-	// add all users, also who are not on channels
-	ch := srv.Channel("&users")
-	for _, mmuser := range u.mc.GetUsers() {
-		// do not add our own nick
-		if mmuser.Id == u.mc.User.Id {
-			continue
+
+	if u.MmInfo.Cfg.UsersChannel {
+		// add all users, also who are not on channels
+		ch := srv.Channel("&users")
+		for _, mmuser := range u.mc.GetUsers() {
+			// do not add our own nick
+			if mmuser.Id == u.mc.User.Id {
+				continue
+			}
+			u.createMMUser(mmuser)
+			u.addUserToChannel(mmuser, "&users", "&users")
 		}
-		u.createMMUser(mmuser)
-		u.addUserToChannel(mmuser, "&users", "&users")
+
+		ch.Join(u)
 	}
-	ch.Join(u)
 
 	// channel that receives messages from channels not joined on irc
-	ch = srv.Channel("&messages")
+	ch := srv.Channel("&messages")
 	ch.Join(u)
 
 	channels := make(chan *model.Channel, 5)
