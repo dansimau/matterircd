@@ -132,27 +132,7 @@ func (m *MMClient) initUser() error {
 		return resp.Error
 	}
 	for _, team := range teams {
-		idx := 0
-		max := 200
-		usermap := make(map[string]*model.User)
-		mmusers, resp := m.Client.GetUsersInTeam(team.Id, idx, max, "")
-		if resp.Error != nil {
-			return errors.New(resp.Error.DetailedError)
-		}
-		for len(mmusers) > 0 {
-			for _, user := range mmusers {
-				usermap[user.Id] = user
-			}
-			mmusers, resp = m.Client.GetUsersInTeam(team.Id, idx, max, "")
-			if resp.Error != nil {
-				return errors.New(resp.Error.DetailedError)
-			}
-			idx++
-			time.Sleep(time.Millisecond * 200)
-		}
-		m.logger.Infof("found %d users in team %s", len(usermap), team.Name)
-
-		t := &Team{Team: team, Users: usermap, Id: team.Id}
+		t := &Team{Team: team, Id: team.Id}
 
 		mmchannels, resp := m.Client.GetChannelsForTeamForUser(team.Id, m.User.Id, "")
 		if resp.Error != nil {
@@ -168,10 +148,6 @@ func (m *MMClient) initUser() error {
 		if team.Name == m.Credentials.Team {
 			m.Team = t
 			m.logger.Debugf("initUser(): found our team %s (id: %s)", team.Name, team.Id)
-		}
-		// add all users
-		for k, v := range t.Users {
-			m.Users[k] = v
 		}
 	}
 	return nil

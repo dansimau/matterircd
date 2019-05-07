@@ -12,5 +12,6 @@ require (
 	github.com/sirupsen/logrus v1.3.0
 	github.com/sorcix/irc v0.0.0-20160513142731-d007bfcbaef1
 	github.com/stretchr/testify v1.3.0
-	golang.org/x/crypto v0.0.0-20190222235706-ffb98f73852f
 )
+
+replace github.com/42wim/matterbridge => github.com/dansimau/matterbridge v1.14.3-0.20190507214828-14ec64efc22e

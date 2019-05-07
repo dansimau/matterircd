@@ -22,6 +22,9 @@ github.com/coreos/go-etcd v2.0.0+incompatible/go.mod h1:Jez6KQU2B/sWsbdaef3ED8Nz
 github.com/coreos/go-semver v0.2.0/go.mod h1:nnelYz7RCh+5ahJtPPxZlU+153eP4D4r3EedlOD2RNk=
 github.com/d5/tengo v1.20.0 h1:lFmktzEGR6khlZu2MHUWJ5oDWS4l3jNRV/OhclZgcYc=
 github.com/d5/tengo v1.20.0/go.mod h1:gsbjo7lBXzBIWBd6NQp1lRKqqiDDANqBOyhW8rTlFsY=
+github.com/dansimau/matterbridge v1.14.3-0.20190501224649-1b2feb19e506/go.mod h1:F9IgjUs61MFehV9JmtlPYt2EZ1J88O31co9rZi2hr0M=
+github.com/dansimau/matterbridge v1.14.3-0.20190507214828-14ec64efc22e h1:f7ff3eINaSbdEzebgn2W/0haavFK9ibMcraUbi2liZ8=
+github.com/dansimau/matterbridge v1.14.3-0.20190507214828-14ec64efc22e/go.mod h1:F9IgjUs61MFehV9JmtlPYt2EZ1J88O31co9rZi2hr0M=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

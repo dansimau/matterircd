@@ -43,7 +43,6 @@ type Team struct {
 	Id           string
 	Channels     []*model.Channel
 	MoreChannels []*model.Channel
-	Users        map[string]*model.User
 }
 
 type MMClient struct {
@@ -54,7 +53,6 @@ type MMClient struct {
 	OtherTeams    []*Team
 	Client        *model.Client4
 	User          *model.User
-	Users         map[string]*model.User
 	MessageChan   chan *Message
 	WsClient      *websocket.Conn
 	WsQuit        bool
@@ -89,7 +87,6 @@ func New(login string, pass string, team string, server string) *MMClient {
 	return &MMClient{
 		Credentials: cred,
 		MessageChan: make(chan *Message, 100),
-		Users:       make(map[string]*model.User),
 		rootLogger:  rootLogger,
 		lruCache:    cache,
 		logger:      rootLogger.WithFields(logrus.Fields{"prefix": "matterclient"}),

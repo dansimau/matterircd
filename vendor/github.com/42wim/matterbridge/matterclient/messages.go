@@ -47,11 +47,6 @@ func (m *MMClient) parseMessage(rmsg *Message) {
 	switch rmsg.Raw.Event {
 	case model.WEBSOCKET_EVENT_POSTED, model.WEBSOCKET_EVENT_POST_EDITED, model.WEBSOCKET_EVENT_POST_DELETED:
 		m.parseActionPost(rmsg)
-	case "user_updated":
-		user := rmsg.Raw.Data["user"].(map[string]interface{})
-		if _, ok := user["id"].(string); ok {
-			m.UpdateUser(user["id"].(string))
-		}
 	case "group_added":
 		if err := m.UpdateChannels(); err != nil {
 			m.logger.Errorf("failed to update channels: %#v", err)
